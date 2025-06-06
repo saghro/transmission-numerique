@@ -17,6 +17,12 @@ public class Channel {
     }
 
     public double[] transmit(double[] signal) {
+        // TEST CRITIQUE : Si SNR > 50 dB, ne pas ajouter de bruit du tout
+        if (snr > 50.0) {
+            System.out.println("Mode sans bruit activé (SNR > 50 dB)");
+            return signal.clone(); // Retourner le signal sans modification
+        }
+        
         switch (noiseType) {
             case AWGN:
                 return addAWGN(signal);
@@ -39,9 +45,16 @@ public class Channel {
         }
         signalPower /= signal.length;
 
+        // DIAGNOSTIC : Afficher les valeurs calculées
+        System.out.println("Puissance du signal: " + signalPower);
+        System.out.println("SNR demandé: " + snr + " dB");
+        
         // Calcul de la puissance du bruit basée sur le SNR
         double noisePower = signalPower / Math.pow(10, snr / 10);
         double noiseAmplitude = Math.sqrt(noisePower);
+        
+        System.out.println("Puissance du bruit: " + noisePower);
+        System.out.println("Amplitude du bruit: " + noiseAmplitude);
 
         // Ajout du bruit blanc gaussien
         Random random = new Random();

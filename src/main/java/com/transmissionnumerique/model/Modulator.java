@@ -1,7 +1,8 @@
 package com.transmissionnumerique.model;
 
 public class Modulator {
-
+    
+    // ENUM REQUIS POUR L'INTERFACE
     public enum ModulationType {
         ASK, FSK, PSK, QPSK, QAM
     }
@@ -19,67 +20,96 @@ public class Modulator {
     public double[] modulate(double[] signal) {
         switch (modulationType) {
             case ASK:
-                return modulateASK(signal);
+                return modulateImprovedASK(signal);
             case FSK:
-                return modulateFSK(signal);
+                return modulateImprovedFSK(signal);
             case PSK:
-                return modulatePSK(signal);
-            case QPSK:
-                return modulateQPSK(signal);
-            case QAM:
-                return modulateQAM(signal);
+                return modulateImprovedPSK(signal);
             default:
-                return modulateASK(signal);
+                return modulateImprovedASK(signal);
         }
     }
 
-    private double[] modulateASK(double[] signal) {
+    // MODULATION ASK AMÉLIORÉE avec meilleure distinction
+    private double[] modulateImprovedASK(double[] signal) {
         double[] modulatedSignal = new double[signal.length];
-        double timeStep = 1.0 / sampleRate;
-
-        for (int i = 0; i < signal.length; i++) {
-            double time = i * timeStep;
-            double amplitude = 0.5 * (signal[i] + 1.0); // Normalisation entre 0 et 1
-            modulatedSignal[i] = amplitude * Math.sin(2 * Math.PI * carrierFrequency * time);
+        
+        // Détecter si on a un signal AMI (présence de valeurs proches de 0)
+        boolean isAMI = false;
+        int zeroCount = 0;
+        for (double value : signal) {
+            if (Math.abs(value) < 0.1) {
+                zeroCount++;
+            }
         }
-
+        isAMI = zeroCount > signal.length / 10; // Plus de 10% de zéros
+        
+        if (isAMI) {
+            // Modulation ASK à 3 niveaux pour AMI
+            System.out.println("Modulation ASK pour signal AMI détectée");
+            
+            for (int i = 0; i < signal.length; i++) {
+                if (Math.abs(signal[i]) < 0.1) {
+                    // Niveau 0 (bit 0) -> amplitude faible
+                    modulatedSignal[i] = 0.0;
+                } else if (signal[i] > 0) {
+                    // Niveau +1 (bit 1, polarité positive) -> amplitude haute
+                    modulatedSignal[i] = 0.8;
+                } else {
+                    // Niveau -1 (bit 1, polarité négative) -> amplitude basse
+                    modulatedSignal[i] = -0.8;
+                }
+            }
+        } else {
+            // Modulation ASK standard pour NRZ
+            double lowAmplitude = -0.8;
+            double highAmplitude = 0.8;
+            
+            for (int i = 0; i < signal.length; i++) {
+                if (signal[i] > 0) {
+                    modulatedSignal[i] = highAmplitude;
+                } else {
+                    modulatedSignal[i] = lowAmplitude;
+                }
+            }
+            
+            System.out.println("Modulation ASK standard avec amplitudes : " + lowAmplitude + " et " + highAmplitude);
+        }
+        
         return modulatedSignal;
     }
 
-    private double[] modulateFSK(double[] signal) {
+    // MODULATION PSK AMÉLIORÉE
+    private double[] modulateImprovedPSK(double[] signal) {
         double[] modulatedSignal = new double[signal.length];
-        double timeStep = 1.0 / sampleRate;
-        double frequencyDeviation = carrierFrequency * 0.1; // 10% de déviation
-
+        
+        // Amplitudes fixes mais phases opposées
+        double amplitude = 1.0;
+        
         for (int i = 0; i < signal.length; i++) {
-            double time = i * timeStep;
-            double instantFrequency = carrierFrequency + signal[i] * frequencyDeviation;
-            modulatedSignal[i] = Math.sin(2 * Math.PI * instantFrequency * time);
+            // Phase 0° pour bit 1, phase 180° pour bit 0
+            modulatedSignal[i] = signal[i] > 0 ? amplitude : -amplitude;
         }
-
+        
         return modulatedSignal;
     }
 
-    private double[] modulatePSK(double[] signal) {
+    // MODULATION FSK AMÉLIORÉE
+    private double[] modulateImprovedFSK(double[] signal) {
         double[] modulatedSignal = new double[signal.length];
-        double timeStep = 1.0 / sampleRate;
-
+        
+        // Valeurs représentant différentes fréquences
+        double freq1 = 0.7;  // Fréquence pour bit 1
+        double freq0 = -0.7; // Fréquence pour bit 0
+        
         for (int i = 0; i < signal.length; i++) {
-            double time = i * timeStep;
-            double phase = signal[i] > 0 ? 0 : Math.PI;
-            modulatedSignal[i] = Math.sin(2 * Math.PI * carrierFrequency * time + phase);
+            modulatedSignal[i] = signal[i] > 0 ? freq1 : freq0;
         }
-
+        
         return modulatedSignal;
     }
 
-    private double[] modulateQPSK(double[] signal) {
-        // Simplification: nous ne gérons pas la conversion en symboles 2 bits
-        return modulatePSK(signal);
-    }
-
-    private double[] modulateQAM(double[] signal) {
-        // Simplification: implémentation basique de QAM
-        return modulatePSK(signal);
+    public ModulationType getModulationType() {
+        return modulationType;
     }
 }

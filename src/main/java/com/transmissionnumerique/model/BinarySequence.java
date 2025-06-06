@@ -28,22 +28,41 @@ public class BinarySequence {
         return bits.length;
     }
 
-    // Calcul du taux d'erreur binaire par rapport à une autre séquence
+    // Calcul du taux d'erreur binaire avec diagnostic détaillé
     public double calculateBER(BinarySequence other) {
         // Si les séquences sont de longueurs différentes, utiliser la plus courte des deux
         int minLength = Math.min(this.getLength(), other.getLength());
+
+        System.out.println("=== CALCUL DU BER ===");
+        System.out.println("Longueur séquence d'entrée: " + this.getLength());
+        System.out.println("Longueur séquence de sortie: " + other.getLength());
+        System.out.println("Longueur utilisée pour comparaison: " + minLength);
 
         if (minLength == 0) {
             return 1.0; // Si l'une des séquences est vide, considérer une erreur maximale
         }
 
         int errors = 0;
+        System.out.println("Comparaison bit par bit (premiers 10 bits):");
         for (int i = 0; i < minLength; i++) {
-            if (this.bits[i] != other.getBits()[i]) {
-                errors++;
+            boolean inputBit = this.bits[i];
+            boolean outputBit = other.getBits()[i];
+            boolean isError = inputBit != outputBit;
+            
+            if (isError) errors++;
+            
+            // Afficher les premiers bits pour diagnostic
+            if (i < 10) {
+                System.out.println("Bit " + i + ": " + inputBit + " -> " + outputBit + 
+                                 (isError ? " ERREUR" : " OK"));
             }
         }
+        
+        double ber = (double) errors / minLength;
+        System.out.println("Nombre total d'erreurs: " + errors + "/" + minLength);
+        System.out.println("BER calculé: " + ber);
+        System.out.println("=====================");
 
-        return (double) errors / minLength;
+        return ber;
     }
 }

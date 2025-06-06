@@ -1,13 +1,14 @@
-/Users/a/IdeaProjects/Transmission/src/main/java/com/transmissionnumerique/model/BinarySequence.java
-/Users/a/IdeaProjects/Transmission/src/main/java/com/transmissionnumerique/model/Modulator.java
-/Users/a/IdeaProjects/Transmission/src/main/java/com/transmissionnumerique/view/TransmissionApp.java
-/Users/a/IdeaProjects/Transmission/src/main/java/com/transmissionnumerique/model/TransmissionChain.java
-/Users/a/IdeaProjects/Transmission/src/main/java/com/transmissionnumerique/controller/TransmissionController.java
-/Users/a/IdeaProjects/Transmission/src/main/java/com/transmissionnumerique/model/Demodulator.java
-/Users/a/IdeaProjects/Transmission/src/main/java/com/transmissionnumerique/model/TransmissionFilter.java
-/Users/a/IdeaProjects/Transmission/src/main/java/com/transmissionnumerique/model/Decoder.java
-/Users/a/IdeaProjects/Transmission/src/main/java/com/transmissionnumerique/model/ReceptionFilter.java
-/Users/a/IdeaProjects/Transmission/src/main/java/com/transmissionnumerique/model/Channel.java
-/Users/a/IdeaProjects/Transmission/src/main/java/com/transmissionnumerique/model/ClockRecovery.java
-/Users/a/IdeaProjects/Transmission/src/main/java/com/transmissionnumerique/Main.java
-/Users/a/IdeaProjects/Transmission/src/main/java/com/transmissionnumerique/model/LineEncoder.java
+/Users/a/Downloads/transmission-numerique v2/src/main/java/com/transmissionnumerique/model/ClockRecovery.java
+/Users/a/Downloads/transmission-numerique v2/src/main/java/com/transmissionnumerique/model/SignalAnalyzer.java
+/Users/a/Downloads/transmission-numerique v2/src/main/java/com/transmissionnumerique/controller/TransmissionController.java
+/Users/a/Downloads/transmission-numerique v2/src/main/java/com/transmissionnumerique/model/Modulator.java
+/Users/a/Downloads/transmission-numerique v2/src/main/java/com/transmissionnumerique/model/BinarySequence.java
+/Users/a/Downloads/transmission-numerique v2/src/main/java/com/transmissionnumerique/model/Demodulator.java
+/Users/a/Downloads/transmission-numerique v2/src/main/java/com/transmissionnumerique/view/SwingTransmissionApp.java
+/Users/a/Downloads/transmission-numerique v2/src/main/java/com/transmissionnumerique/model/TransmissionFilter.java
+/Users/a/Downloads/transmission-numerique v2/src/main/java/com/transmissionnumerique/model/Channel.java
+/Users/a/Downloads/transmission-numerique v2/src/main/java/com/transmissionnumerique/model/ReceptionFilter.java
+/Users/a/Downloads/transmission-numerique v2/src/main/java/com/transmissionnumerique/model/Decoder.java
+/Users/a/Downloads/transmission-numerique v2/src/main/java/com/transmissionnumerique/Main.java
+/Users/a/Downloads/transmission-numerique v2/src/main/java/com/transmissionnumerique/model/TransmissionChain.java
+/Users/a/Downloads/transmission-numerique v2/src/main/java/com/transmissionnumerique/model/LineEncoder.java

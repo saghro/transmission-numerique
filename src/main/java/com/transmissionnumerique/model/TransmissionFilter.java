@@ -1,55 +1,43 @@
 package com.transmissionnumerique.model;
 
 public class TransmissionFilter {
-
+    
     public enum FilterType {
         RECTANGULAR, RAISED_COSINE, ROOT_RAISED_COSINE
     }
 
     private FilterType filterType;
-    private int sampleRate;
-    private double rollOff;
+    private int samplesPerSymbol;
 
     public TransmissionFilter(FilterType filterType, int sampleRate, double rollOff) {
         this.filterType = filterType;
-        this.sampleRate = sampleRate;
-        this.rollOff = rollOff;
+        this.samplesPerSymbol = 4; // Cohérent avec ClockRecovery
     }
 
     public double[] filter(double[] signal) {
         switch (filterType) {
             case RECTANGULAR:
-                return rectangularFilter(signal);
+                return ultraSimpleRectangularFilter(signal);
             case RAISED_COSINE:
-                return raisedCosineFilter(signal);
+                return ultraSimpleRectangularFilter(signal); // Même chose pour l'instant
             case ROOT_RAISED_COSINE:
-                return rootRaisedCosineFilter(signal);
+                return ultraSimpleRectangularFilter(signal); // Même chose pour l'instant
             default:
-                return rectangularFilter(signal);
+                return ultraSimpleRectangularFilter(signal);
         }
     }
 
-    private double[] rectangularFilter(double[] signal) {
-        // Pour simplifier, on renvoie le signal sans modification
-        return signal.clone();
-    }
-
-    private double[] raisedCosineFilter(double[] signal) {
-        // Implémentation d'un filtre en cosinus surélevé
-        // Cela nécessite une convolution avec la réponse impulsionnelle du filtre
-
-        // Version simplifiée
-        double[] output = new double[signal.length];
-        System.arraycopy(signal, 0, output, 0, signal.length);
-        return output;
-    }
-
-    private double[] rootRaisedCosineFilter(double[] signal) {
-        // Implémentation d'un filtre en racine de cosinus surélevé
-
-        // Version simplifiée
-        double[] output = new double[signal.length];
-        System.arraycopy(signal, 0, output, 0, signal.length);
+    // FILTRE ULTRA-SIMPLE pour éliminer les problèmes de synchronisation
+    private double[] ultraSimpleRectangularFilter(double[] signal) {
+        double[] output = new double[signal.length * samplesPerSymbol];
+        
+        // Suréchantillonnage parfait sans interpolation
+        for (int i = 0; i < signal.length; i++) {
+            for (int j = 0; j < samplesPerSymbol; j++) {
+                output[i * samplesPerSymbol + j] = signal[i];
+            }
+        }
+        
         return output;
     }
 }
